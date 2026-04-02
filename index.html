@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sistema de Monitoreo Integral</title>
+
+<link rel="stylesheet" href="index.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- ===================================================== -->
+<!-- 🔴 HEADER -->
+<!-- ===================================================== -->
+<header class="header">
+
+    <div class="header-left">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+            <h1>SISTEMA DE MONITOREO INTEGRAL</h1>
+            
+        </div>
+    </div>
+
+    <nav class="nav">
+       <div class="dropdown" id="dropdownMenu">
+
+            <button class="dropbtn" id="btnDropdown">
+                <i class="fa fa-upload"></i> Subir Base
+                <i class="fa fa-chevron-down"></i>
+            </button>
+
+            <div class="dropdown-content" id="dropdownContent">
+
+                <a href="Actulizar_BD/justificaciones/justificaciones.html">
+                    <i class="fa fa-file"></i> Justificaciones
+                </a>
+
+                <a href="Actulizar_BD/faltas/faltas.html">
+                    <i class="fa fa-calendar-xmark"></i> Faltas
+                </a>
+
+            </div>
+
+        </div>
+        
+        <a id="btnLogout"><i class="fa fa-sign-out-alt"></i> Cerrar Sesión</a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+<!-- ===================================================== -->
+<!-- 📊 KPIs + FILTRO (UNA SOLA FILA) -->
+<!-- ===================================================== -->
+<div class="kpi-row">
+
+    <!-- 🔍 FILTRO MES -->
+    <div class="kpi filtro-kpi">
+        <i class="fa fa-filter"></i>
+        <span>Mes</span>
+        <select id="filtroMes">
+            <option value="">Seleccione</option>
+        </select>
+    </div>
+
+    <!-- 🔴 FALTAS -->
+    <div class="kpi">
+        <i class="fa fa-calendar-xmark"></i>
+        <span>Total Faltas</span>
+        <h2 id="kpiFaltas">0</h2>
+    </div>
+
+    <!-- 🟡 JUSTIFICACIONES -->
+    <div class="kpi">
+        <i class="fa fa-file"></i>
+        <span>Total Justificaciones</span>
+        <h2 id="kpiJustificaciones">0</h2>
+    </div>
+
+   
+    <!-- 👥 PERSONAS -->
+    <div class="kpi">
+        <i class="fa fa-users"></i>
+        <span>Personas</span>
+        <h2 id="kpiPersonas">0</h2>
+    </div>
+    
+
+    <!-- ⚠️ REINCIDENTES -->
+    <div class="kpi alerta">
+        <i class="fa fa-triangle-exclamation"></i>
+        <span>Reincidentes Justificaciones</span>
+        <h2 id="kpiReincidentesJustificaciones">0</h2>
+    </div>
+
+      <!-- ⚠️ REINCIDENTES -->
+    <div class="kpi alerta">
+        <i class="fa fa-triangle-exclamation"></i>
+        <span>Reincidentes Faltas</span>
+        <h2 id="kpiReincidentesFaltas">0</h2>
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- 📈 GRÁFICO 1 -->
+<!-- ===================================================== -->
+<div class="grafico-full">
+    <h3>Faltas vs Justificaciones por Sub-Gerencia</h3>
+    <canvas id="chartSubgerencia"></canvas>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- 📊 GRÁFICOS 2 Y 3 -->
+<!-- ===================================================== -->
+<div class="graficos">
+     <div class="grafico">
+        <h3>Personas Reportadas</h3>
+        <canvas id="chartPersonasUnicas"></canvas>
+    </div>
+
+
+    <div class="grafico">
+        <h3>Reincidentes por Sub-Gerencia</h3>
+        <canvas id="chartReincidentes"></canvas>
+    </div>
+
+   
+</div>
+
+
+<!-- ===================================================== -->
+<!-- 📈 GRÁFICO 4 -->
+<!-- ===================================================== -->
+<div class="grafico-full">
+    <h3>Comparación con Meses Pasados</h3>
+    <canvas id="chartMeses"></canvas>
+</div>
+
+
+
+
+<!-- ===================================================== -->
+<!-- ⚡ ACCIONES -->
+<!-- ===================================================== -->
+<div class="acciones">
+
+    <a href="faltas/faltas.html" class="accion">
+        <i class="fa fa-calendar"></i>
+        <div>
+            <h3>Ir a Análisis de Faltas</h3>
+            <span>Análisis detallado de faltas</span>
+        </div>
+    </a>
+
+    <a href="justificacion/justificacion.html" class="accion">
+        <i class="fa fa-file"></i>
+        <div>
+            <h3>Ir a Análisis de Justificaciones</h3>
+            <span>Control de papeletas</span>
+        </div>
+    </a>
+
+</div>
+
+
+
+</body>
+ <script type="module" src="index.js"></script>
+</html>

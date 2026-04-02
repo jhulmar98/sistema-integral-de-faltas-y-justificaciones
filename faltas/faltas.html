@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sistema de Monitoreo de Faltas</title>
+
+<link rel="stylesheet" href="faltas.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- ===================================================== -->
+<!-- 🟢 HEADER -->
+<!-- ===================================================== -->
+<header class="header">
+
+    <a href="../index.html" class="btn-regresar">
+        <i class="fa fa-arrow-left"></i>
+        Regresar
+    </a>
+
+    <span class="titulo-header">
+        SISTEMA DE MONITOREO DE FALTAS
+    </span>
+
+</header>
+
+<div class="container">
+
+    <!-- ===================================================== -->
+    <!-- 🎛️ FILTROS (ESTILO TARJETA COMO TU IMAGEN) -->
+    <!-- ===================================================== -->
+    <div class="filtros-card">
+
+        <h3>Filtros de Consulta</h3>
+
+        <div class="filtros">
+
+            <div class="filtro">
+                <label>MES</label>
+                <select id="selectMes"></select>
+            </div>
+
+            <div class="filtro">
+                <label>SUB-GERENCIA</label>
+                <select id="selectUnidad"></select>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 📊 KPIs (ESTILO TARJETAS CON ICONOS) -->
+    <!-- ===================================================== -->
+    <div class="kpis">
+
+        <div class="card">
+            <div class="icon rojo">
+                <i class="fa-solid fa-calendar-xmark"></i>
+            </div>
+            <div class="info">
+                <span>Total Faltas</span>
+                <h2 id="kpiTotal">0</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon azul">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="info">
+                <span>Personas que faltaron</span>
+                <h2 id="kpiPersonas">0</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon naranja">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div class="info">
+                <span>Día con más faltas</span>
+                <h2 id="kpiDia">-</h2>
+            </div>
+        </div>
+
+        <div class="card alerta">
+            <div class="icon rojo">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="info">
+                <span>Reincidentes (&gt;2 faltas)</span>
+                <h2 id="kpiReincidentes">0</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 📈 GRAFICO PRINCIPAL -->
+    <!-- ===================================================== -->
+    <div class="grafico-full">
+        <h3>Comportamiento por Día</h3>
+        <canvas id="chartDias"></canvas>
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 📊 GRAFICOS SECUNDARIOS -->
+    <!-- ===================================================== -->
+    <div class="graficos">
+
+        <div class="grafico">
+            <h3>Faltas por Sector</h3>
+            <canvas id="chartSector"></canvas>
+        </div>
+
+        <div class="grafico">
+            <h3>Personas con Más Faltas</h3>
+            <canvas id="chartPersonas"></canvas>
+        </div>
+
+        <div class="grafico">
+            <h3>Faltas por Cargo</h3>
+            <canvas id="chartCargo"></canvas>
+        </div>
+
+        <div class="grafico">
+            <h3>Régimen Laboral</h3>
+            <canvas id="chartRegimen"></canvas>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- 📋 TABLA -->
+    <!-- ===================================================== -->
+    <div class="tabla-section">
+
+        <div class="tabla-header">
+            <h3>Detalle de Faltas</h3>
+
+            <div class="filtros-tabla">
+                <input type="text" id="filtroTexto" placeholder="Buscar por Nombre">
+                <input type="date" id="filtroFecha">
+            </div>
+        </div>
+
+        <div class="tabla-contenedor">
+            <table id="tablaFaltas">
+
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>DÍA</th>
+                        <th>NOMBRES</th>
+                        <th>CARGO</th>
+                        <th>SECTOR</th>
+                        <th>RÉGIMEN</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- JS -->
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module" src="js/dashboard.js"></script>
+
+</body>
+</html>

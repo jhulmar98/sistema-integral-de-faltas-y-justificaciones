@@ -1,0 +1,383 @@
+/* =========================================================
+   🌿 SISTEMA MONITOREO INTEGRAL - OLIVO PRO FINAL
+========================================================= */
+
+/* ===============================
+   VARIABLES
+=============================== */
+:root {
+    --primary: #556b2f;
+    --primary-dark: #3e4f1f;
+    --primary-light: #7a9a3a;
+
+    --bg: #f4f7f2;
+    --bg-soft: #eef2ec;
+
+    --surface: #ffffff;
+
+    --text: #1f2937;
+    --text-soft: #6b7280;
+
+    --danger: #dc2626;
+
+    --radius: 14px;
+
+    --shadow-soft: 0 4px 10px rgba(0,0,0,0.05);
+    --shadow-medium: 0 10px 25px rgba(0,0,0,0.08);
+    --shadow-strong: 0 15px 40px rgba(0,0,0,0.12);
+
+    --transition: 0.25s ease;
+}
+
+/* ===============================
+   BASE
+=============================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, var(--bg), var(--bg-soft));
+    color: var(--text);
+}
+
+/* ===============================
+   HEADER
+=============================== */
+.header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 18px 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: var(--shadow-medium);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left i {
+    font-size: 26px;
+}
+
+.header h1 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.nav a {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: white;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.nav a:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+/* ===============================
+   DROPDOWN PRO (CLICK)
+=============================== */
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+
+    padding: 7px 14px;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition: var(--transition);
+}
+
+.dropbtn:hover {
+    background: rgba(255,255,255,0.20);
+}
+
+/* MENÚ */
+.dropdown-content {
+    position: absolute;
+    right: 0;
+    top: 42px;
+
+    min-width: 220px;
+
+    background: white;
+
+    border-radius: 12px;
+    box-shadow: var(--shadow-strong);
+
+    overflow: hidden;
+    z-index: 1000;
+
+    display: none;
+}
+
+/* ACTIVO */
+.dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* ITEMS */
+.dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px;
+
+    text-decoration: none;
+    color: var(--text);
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.dropdown-content a i {
+    color: var(--primary);
+}
+
+/* HOVER */
+.dropdown-content a:hover {
+    background: #eef6e6;
+    transform: translateX(4px);
+}
+
+/* ===============================
+   CONTENEDOR
+=============================== */
+.container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 25px 20px;
+}
+
+/* ===============================
+   KPI
+=============================== */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.kpi {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 14px;
+
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.03);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transition: var(--transition);
+}
+
+.kpi:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+}
+
+.kpi i {
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.kpi span {
+    font-size: 11px;
+    color: var(--text-soft);
+}
+
+.kpi h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ALERTAS */
+.kpi.alerta {
+    border-top: 4px solid var(--danger);
+    background: linear-gradient(180deg, #fff, #fef2f2);
+}
+
+/* FILTRO */
+.filtro-kpi select {
+    margin-top: 6px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    width: 100%;
+}
+
+/* ===============================
+   GRÁFICOS
+=============================== */
+.grafico-full,
+.grafico {
+    background: var(--surface);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(0,0,0,0.04);
+
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.grafico-full:hover,
+.grafico:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-strong);
+}
+
+/* ALTURAS */
+.grafico-full {
+    height: 400px;
+    margin-bottom: 20px;
+}
+
+.grafico {
+    height: 330px;
+}
+
+/* TITULOS */
+.grafico h3,
+.grafico-full h3 {
+    font-size: 13px;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* CANVAS */
+canvas {
+    display: block !important;
+    width: 100% !important;
+    height: calc(100% - 45px) !important;
+    padding: 10px;
+}
+
+/* GRID */
+.graficos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* ===============================
+   ACCIONES
+=============================== */
+.acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.accion {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+
+    padding: 22px;
+    border-radius: var(--radius);
+
+    text-decoration: none;
+    box-shadow: var(--shadow-medium);
+
+    transition: var(--transition);
+}
+
+.accion:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--shadow-strong);
+}
+
+.accion i {
+    font-size: 26px;
+}
+
+.accion h3 {
+    font-size: 14px;
+}
+
+.accion span {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* ===============================
+   RESPONSIVE
+=============================== */
+@media (max-width: 1200px) {
+
+    .kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .graficos {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .acciones {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .kpi-row {
+        grid-template-columns: 1fr;
+    }
+
+}

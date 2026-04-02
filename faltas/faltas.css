@@ -1,0 +1,808 @@
+/* =========================================================
+   📊 SISTEMA DE MONITOREO DE FALTAS
+   CSS PRODUCCIÓN FINAL - DINÁMICO REAL
+   Compatible con tu HTML actual y tu dashboard.js actual
+
+   OBJETIVOS:
+   - Sin scroll lateral
+   - Diseño profesional y limpio
+   - Responsive real
+   - Tabla con scroll interno
+   - Gráficos controlados por JS, no por CSS
+   - Sin alturas fijas que rompan Chart.js
+========================================================= */
+
+
+/* =========================================================
+   1) RESET GLOBAL Y CONTROL DE OVERFLOW
+========================================================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #0f172a;
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), rgba(238,243,248,0.98)),
+        linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+    line-height: 1.4;
+}
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #556b2f, #3e4f1f);
+    color: white;
+
+    padding: 18px 25px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative; /* 🔥 IMPORTANTE */
+}
+
+/* BOTÓN PEGADO AL BORDE REAL */
+.btn-regresar {
+    position: absolute;
+    left: 10px; /* 🔥 PEGADO AL BORDE REAL */
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: white;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    transition: 0.25s ease;
+}
+
+/* HOVER */
+.btn-regresar:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-3px);
+}
+
+/* TITULO CENTRADO VISUAL */
+.titulo-header {
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* =========================================================
+   2) VARIABLES DE DISEÑO
+   NOTA:
+   - Se mantienen variables visuales
+   - Se eliminan alturas fijas para gráficos
+========================================================= */
+:root {
+    --color-primary: #556B2F;
+    --color-primary-dark: #3f4f22;
+    --color-primary-soft: #eef5e6;
+
+    --color-accent: #1d4e89;
+    --color-danger: #dc2626;
+    --color-warning: #d97706;
+
+    --color-bg: #eef3f8;
+    --color-surface: #ffffff;
+    --color-surface-2: #f8fafc;
+
+    --color-border: #e2e8f0;
+    --color-border-strong: #cbd5e1;
+
+    --color-text: #0f172a;
+    --color-text-soft: #64748b;
+    --color-text-muted: #94a3b8;
+
+    --shadow-xs: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 6px 16px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 12px 28px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 18px 36px rgba(15, 23, 42, 0.12);
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+
+    --gap-xs: 8px;
+    --gap-sm: 12px;
+    --gap-md: 16px;
+    --gap-lg: 20px;
+    --gap-xl: 24px;
+
+    --container-max: 1600px;
+    --header-height: 64px;
+
+    --table-max-height: 440px;
+}
+
+
+/* =========================================================
+   3) HEADER PRINCIPAL
+========================================================= */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    min-height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 14px 20px;
+
+    background:
+        linear-gradient(135deg, #4c6228 0%, #556B2F 45%, #6b8e23 100%);
+    color: #ffffff;
+
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-align: center;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+
+/* =========================================================
+   4) CONTENEDOR GENERAL
+========================================================= */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+}
+
+
+/* =========================================================
+   5) ESTILO BASE TARJETAS / PANELES
+   IMPORTANTE:
+   - Se mantiene tu look profesional
+   - No se fuerza altura en tarjetas de gráficos
+========================================================= */
+.filtros-card,
+.card,
+.grafico-full,
+.grafico,
+.tabla-section {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.filtros-card::before,
+.card::before,
+.grafico-full::before,
+.grafico::before,
+.tabla-section::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, #556B2F 0%, #7c9c3a 50%, #a8b95d 100%);
+    opacity: 0.95;
+}
+
+.filtros-card:hover,
+.card:hover,
+.grafico-full:hover,
+.grafico:hover,
+.tabla-section:hover {
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover,
+.grafico:hover,
+.grafico-full:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   6) FILTROS SUPERIORES
+========================================================= */
+.filtros-card {
+    padding: 22px 20px 18px;
+}
+
+.filtros-card h3 {
+    margin: 0 0 16px;
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+.filtros {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.filtro {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filtro label {
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: var(--color-text-soft);
+    letter-spacing: 0.5px;
+}
+
+.filtro select {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    padding: 0 14px;
+
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    outline: none;
+
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    color: var(--color-text);
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.filtro select:hover {
+    border-color: #b8c4d3;
+    background: #ffffff;
+}
+
+.filtro select:focus {
+    border-color: rgba(85, 107, 47, 0.7);
+    box-shadow: 0 0 0 4px rgba(85, 107, 47, 0.12);
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   7) KPIs
+========================================================= */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gap-md);
+}
+
+.card {
+    min-height: 110px;
+    padding: 22px 18px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.card.alerta {
+    background:
+        linear-gradient(180deg, #fff9f9 0%, #fff3f3 100%);
+    border-color: #f3d2d2;
+}
+
+.icon {
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.28rem;
+
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+}
+
+.icon.rojo {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #dc2626;
+}
+
+.icon.azul {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1d4e89;
+}
+
+.icon.naranja {
+    background: linear-gradient(135deg, #ffedd5, #fed7aa);
+    color: #d97706;
+}
+
+.info {
+    min-width: 0;
+}
+
+.info span {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-text-soft);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.info h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.55rem;
+    font-weight: 900;
+    line-height: 1.1;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   8) BLOQUE DE GRÁFICO PRINCIPAL
+   IMPORTANTE:
+   - Sin height fijo
+   - Sin min-height
+   - El alto lo define JS con style.height
+========================================================= */
+.grafico-full {
+    padding: 22px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.grafico-full h3 {
+    margin: 0 0 14px;
+    color: var(--color-primary);
+    font-size: 1.02rem;
+    font-weight: 800;
+    flex: 0 0 auto;
+}
+
+.grafico-full canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   9) GRID DE GRÁFICOS SECUNDARIOS
+   IMPORTANTE:
+   - Se elimina cualquier altura rígida
+   - Se deja que el JS controle la altura real
+========================================================= */
+.graficos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-md);
+    align-items: start;
+}
+
+.grafico {
+    padding: 22px 18px 18px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.grafico h3 {
+    margin: 0 0 14px;
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 800;
+    flex: 0 0 auto;
+}
+
+.grafico canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   10) TABLA - BLOQUE GENERAL
+========================================================= */
+.tabla-section {
+    padding: 22px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tabla-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+.tabla-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   11) FILTROS DE TABLA
+========================================================= */
+.filtros-tabla {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-width: 0;
+    margin-left: auto;
+}
+
+.filtros-tabla input {
+    height: 42px;
+    min-width: 0;
+
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    outline: none;
+
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    color: var(--color-text);
+
+    padding: 0 14px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.02);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.filtros-tabla input::placeholder {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.filtros-tabla input[type="text"] {
+    width: 280px;
+}
+
+.filtros-tabla input[type="date"] {
+    width: 180px;
+}
+
+.filtros-tabla input:hover {
+    border-color: #bac5d3;
+    background: #ffffff;
+}
+
+.filtros-tabla input:focus {
+    border-color: rgba(85, 107, 47, 0.72);
+    box-shadow: 0 0 0 4px rgba(85, 107, 47, 0.12);
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   12) CONTENEDOR TABLA
+========================================================= */
+.tabla-contenedor {
+    width: 100%;
+    max-width: 100%;
+    max-height: var(--table-max-height);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ebf0f6;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+
+/* =========================================================
+   13) TABLA PROFESIONAL
+========================================================= */
+#tablaFaltas {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+#tablaFaltas thead {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+#tablaFaltas thead tr {
+    background: linear-gradient(135deg, #556B2F 0%, #6b8e23 100%);
+}
+
+#tablaFaltas th {
+    padding: 13px 12px;
+    text-align: left;
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#tablaFaltas th:first-child {
+    border-top-left-radius: 12px;
+}
+
+#tablaFaltas th:last-child {
+    border-top-right-radius: 12px;
+}
+
+#tablaFaltas td {
+    padding: 11px 12px;
+    font-size: 0.84rem;
+    color: var(--color-text);
+    border-bottom: 1px solid #edf2f7;
+
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+}
+
+#tablaFaltas tbody tr {
+    background: #ffffff;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#tablaFaltas tbody tr:nth-child(even) {
+    background: #fbfdff;
+}
+
+#tablaFaltas tbody tr:hover {
+    background: #f3f8ee;
+}
+
+#tablaFaltas tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   14) ANCHO RELATIVO DE COLUMNAS
+========================================================= */
+#tablaFaltas th:nth-child(1),
+#tablaFaltas td:nth-child(1) {
+    width: 12%;
+}
+
+#tablaFaltas th:nth-child(2),
+#tablaFaltas td:nth-child(2) {
+    width: 11%;
+}
+
+#tablaFaltas th:nth-child(3),
+#tablaFaltas td:nth-child(3) {
+    width: 29%;
+}
+
+#tablaFaltas th:nth-child(4),
+#tablaFaltas td:nth-child(4) {
+    width: 22%;
+}
+
+#tablaFaltas th:nth-child(5),
+#tablaFaltas td:nth-child(5) {
+    width: 11%;
+}
+
+#tablaFaltas th:nth-child(6),
+#tablaFaltas td:nth-child(6) {
+    width: 15%;
+}
+
+
+/* =========================================================
+   15) SCROLL INTERNO ESTILIZADO
+========================================================= */
+.tabla-contenedor::-webkit-scrollbar {
+    width: 10px;
+}
+
+.tabla-contenedor::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.tabla-contenedor::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+}
+
+.tabla-contenedor::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #94a3b8, #64748b);
+}
+
+
+/* =========================================================
+   16) AJUSTES VISUALES EXTRA
+========================================================= */
+canvas {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+
+/* =========================================================
+   17) RESPONSIVE - LAPTOP MEDIANA
+========================================================= */
+@media (max-width: 1280px) {
+    .container {
+        padding: 18px;
+    }
+
+    .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   18) RESPONSIVE - TABLET
+   IMPORTANTE:
+   - No se fija altura a gráficos
+========================================================= */
+@media (max-width: 1024px) {
+    .graficos {
+        grid-template-columns: 1fr;
+    }
+
+    #tablaFaltas th,
+    #tablaFaltas td {
+        font-size: 0.8rem;
+    }
+}
+
+
+/* =========================================================
+   19) RESPONSIVE - MÓVIL GRANDE
+========================================================= */
+@media (max-width: 768px) {
+    .header {
+        font-size: 1rem;
+        padding: 14px 12px;
+        letter-spacing: 0.3px;
+    }
+
+    .container {
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .filtros {
+        grid-template-columns: 1fr;
+    }
+
+    .kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        min-height: 96px;
+    }
+
+    .grafico-full,
+    .grafico {
+        padding: 20px 14px 14px;
+    }
+
+    .tabla-section {
+        padding: 20px 14px 14px;
+    }
+
+    .tabla-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-tabla {
+        width: 100%;
+        margin-left: 0;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-tabla input[type="text"],
+    .filtros-tabla input[type="date"] {
+        width: 100%;
+    }
+
+    #tablaFaltas th,
+    #tablaFaltas td {
+        padding: 10px 9px;
+        font-size: 0.76rem;
+    }
+}
+
+
+/* =========================================================
+   20) RESPONSIVE - MÓVIL PEQUEÑO
+========================================================= */
+@media (max-width: 480px) {
+    .header {
+        font-size: 0.92rem;
+    }
+
+    .filtros-card,
+    .card,
+    .grafico-full,
+    .grafico,
+    .tabla-section {
+        border-radius: 16px;
+    }
+
+    .info h2 {
+        font-size: 1.35rem;
+    }
+
+    .grafico-full h3,
+    .grafico h3,
+    .tabla-header h3,
+    .filtros-card h3 {
+        font-size: 0.95rem;
+    }
+
+    #tablaFaltas th,
+    #tablaFaltas td {
+        font-size: 0.72rem;
+    }
+}

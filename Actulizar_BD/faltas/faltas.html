@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Subida de Faltas</title>
+
+<link rel="stylesheet" href="faltas.css">
+
+<!-- ICONOS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- XLSX -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ===================================================== -->
+    <!-- 🔙 BOTÓN REGRESAR -->
+    <!-- ===================================================== -->
+    <a href="../../index.html" class="btn-regresar">
+        <i class="fa fa-arrow-left"></i> Regresar
+    </a>
+
+    <!-- ===================================================== -->
+    <!-- 🚨 TÍTULO -->
+    <!-- ===================================================== -->
+    <h2>🚨 ACTUALIZAR BASE DE DATOS DE FALTAS</h2>
+
+    <!-- ===================================================== -->
+    <!-- 📂 INPUT -->
+    <!-- ===================================================== -->
+    <input type="file" id="fileInput">
+
+    <!-- ===================================================== -->
+    <!-- ⚡ ACCIONES -->
+    <!-- ===================================================== -->
+    <div class="acciones">
+        <button id="btnPreview">Previsualizar</button>
+        <button id="btnSubir">Subir</button>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 📊 PROGRESO -->
+    <!-- ===================================================== -->
+    <div class="progress">
+        <div class="bar" id="bar">0%</div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- 📢 ESTADO -->
+    <!-- ===================================================== -->
+    <div id="status" class="status"></div>
+
+    <!-- ===================================================== -->
+    <!-- 📋 TABLA PREVIEW -->
+    <!-- ===================================================== -->
+    <div class="tabla-container">
+        <div id="preview"></div>
+    </div>
+
+</div>
+
+<script type="module" src="faltas.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <!-- ===================================================== -->
+    <!-- 🔧 CONFIGURACIÓN GENERAL -->
+    <!-- ===================================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoreo de Justificaciones</title>
+
+    <!-- ===================================================== -->
+    <!-- 🎨 ICONOS Y ESTILOS -->
+    <!-- ===================================================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="justificacion.css">
+
+    <!-- ===================================================== -->
+    <!-- 📊 CHART.JS -->
+    <!-- ===================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+    <!-- ===================================================== -->
+    <!-- 🔴 HEADER PRINCIPAL FULL WIDTH -->
+    <!-- ===================================================== -->
+   <header class="top-header">
+
+        <div class="top-header__content">
+
+            <!-- 🔙 BOTÓN -->
+            <a href="../index.html" class="btn-regresar">
+                <i class="fa fa-arrow-left"></i>
+                Regresar
+            </a>
+
+            <!-- TÍTULO -->
+            <div class="top-header__title">
+                <h1>SISTEMA DE MONITOREO DE JUSTIFICACIONES</h1>
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="top-header__actions"></div>
+
+        </div>
+
+    </header>
+
+    <!-- ===================================================== -->
+    <!-- 📦 CONTENEDOR PRINCIPAL -->
+    <!-- ===================================================== -->
+    <main class="page-container">
+
+        <!-- ================================================= -->
+        <!-- 🎛️ PANEL DE FILTROS -->
+        <!-- ================================================= -->
+        <section class="panel panel-filtros">
+
+            <div class="panel__header">
+                <h2>Filtros de Consulta</h2>
+                
+            </div>
+
+            <div class="filtros-grid">
+               
+
+                <!-- ========================= -->
+                <!-- FILTRO MES -->
+                <!-- ========================= -->
+                <div class="campo">
+                    <label for="filtroMes">Mes</label>
+                    <select id="filtroMes">
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+
+                 <!-- ========================= -->
+                <!-- FILTRO SUB-GERENCIA -->
+                <!-- ========================= -->
+                <div class="campo">
+                    <label for="filtroUnidad">Sub-Gerencia</label>
+                    <select id="filtroUnidad">
+                        <option value="">Seleccione</option>
+                    </select>
+                </div>
+
+               
+
+               
+
+                
+
+            </div>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- 📊 KPIs PRINCIPALES -->
+        <!-- ================================================= -->
+        <section class="kpi-grid">
+
+            <article class="kpi-card">
+                <div class="kpi-card__icon">
+                    <i class="fa-solid fa-file-circle-exclamation"></i>
+                </div>
+                <div class="kpi-card__content">
+                    <h3>Total de Papeletas</h3>
+                    <h4 id="kpiTotal">0</h4>
+                    
+                </div>
+            </article>
+
+            <article class="kpi-card">
+                <div class="kpi-card__icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="kpi-card__content">
+                    <h3>Personas Sancionadas</h3>
+                    <h4 id="kpiPersonas">0</h4>
+                    
+                </div>
+            </article>
+
+            <article class="kpi-card">
+                <div class="kpi-card__icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+                <div class="kpi-card__content">
+                    <h3>Motivo Más Frecuente</h3>
+                    <h4 id="kpiUnidad">-</h4>
+                    
+                </div>
+            </article>
+
+            <article class="kpi-card kpi-card--alert">
+                <div class="kpi-card__icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="kpi-card__content">
+                    <h3>Reincidentes Críticos</h3>
+                    <h4 id="kpiReincidentes">0</h4>
+                    
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- 📈 GRÁFICOS -->
+        <!-- ================================================= -->
+        <section class="charts-grid">
+
+            <article class="panel chart-panel chart-panel--wide">
+                <div class="panel__header">
+                    <h2>Tendencia de Papeletas por Día</h2>
+                   
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="graficoDias"></canvas>
+                </div>
+            </article>
+
+            <article class="panel chart-panel">
+                <div class="panel__header">
+                    <h2>Personal con Más Papeletas</h2>
+                    
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="personaspapeletas"></canvas>
+                </div>
+            </article>
+
+            <article class="panel chart-panel">
+                <div class="panel__header">
+                    <h2>Motivo de Papeletas</h2>
+                    
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="motivospapeletas"></canvas>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- 🧠 ANÁLISIS Y ALERTAS -->
+        <!-- ================================================= -->
+        <section class="insights-grid">
+
+            <article class="panel">
+                <div class="panel__header">
+                    <h2>Tipo de Papeleta</h2>
+                    
+                </div>
+                <ul id="tipopapeletas" class="insight-list">
+                    
+                </ul>
+            </article>
+
+            <article class="panel">
+                <div class="panel__header">
+                    <h2>Comentarios</h2>
+                   
+                </div>
+                <ul id="comentarios" class="insight-list insight-list--alert">
+                    
+                </ul>
+            </article>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- 📋 TABLA DETALLADA -->
+        <!-- ================================================= -->
+        <section class="panel panel-tabla">
+
+            <div class="panel__header">
+                <h2>Detalle de Papeletas</h2>
+                
+            </div>
+
+            <div class="table-responsive">
+                <table id="tablaPapeletas">
+
+                    <thead>
+                        <tr>
+                            <th>DNI</th>
+                            <th>Apellidos y Nombres</th>
+                            <th>Unidad</th>
+                            <th>Tipo de Papeleta</th>
+                            <th>Fecha Inicio</th>
+                            <th>Motivo</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- Se llena con JavaScript -->
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ===================================================== -->
+    <!-- ⚙️ JAVASCRIPT PRINCIPAL -->
+    <!-- ===================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <script type="module" src="js/sub-gerencias.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+
+</body>
+</html>
