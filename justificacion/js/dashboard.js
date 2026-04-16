@@ -111,14 +111,29 @@ function actualizarKPIs(data) {
     // -------------------------------
     // Personas sancionadas (DNI únicos)
     // -------------------------------
-    const dnis = new Set();
+    const personas = new Set();
 
-    data.forEach(item => {
-        const dni = getField(item, ["DNI"]);
-        if (dni !== "") dnis.add(String(dni).trim());
-    });
+        data.forEach(item => {
 
-    setTexto("kpiPersonas", dnis.size);
+            let dni = String(getField(item, ["DNI", "N° DNI", "DOCUMENTO", "NUMERO DNI"]) || "")
+                .trim()
+                .replace(/\s+/g, "");
+
+            let nombre = String(getField(item, ["APELLIDOS Y NOMBRES", "NOMBRE"]) || "")
+                .trim()
+                .toUpperCase();
+
+            // 🔥 MISMA LÓGICA QUE REINCIDENTES
+            let key = dni ? `DNI_${dni}` : `NOMBRE_${nombre}`;
+
+            if (!dni && !nombre) return;
+
+            personas.add(key);
+        });
+
+        setTexto("kpiPersonas", personas.size);
+
+    
 
     // -------------------------------
     // Motivo más frecuente
@@ -134,11 +149,35 @@ function actualizarKPIs(data) {
     // -------------------------------
     // Reincidentes críticos (> 3)
     // -------------------------------
-    const conteoDni = contarPorCampo(data, ["DNI"]);
-    const reincidentesCriticos = Object.values(conteoDni).filter(v => v >= 3).length;
+    const conteoPersonas = {};
 
-    setTexto("kpiReincidentes", reincidentesCriticos);
-}
+        data.forEach(item => {
+
+            let dni = String(getField(item, ["DNI"]) || "")
+                .trim()
+                .replace(/\s+/g, "");
+
+            let nombre = String(getField(item, ["APELLIDOS Y NOMBRES", "NOMBRE"]) || "")
+                .trim()
+                .toUpperCase();
+
+            // 🔥 CLAVE INTELIGENTE
+            let key = dni ? `DNI_${dni}` : `NOMBRE_${nombre}`;
+
+            if (!nombre && !dni) return;
+
+            conteoPersonas[key] = (conteoPersonas[key] || 0) + 1;
+        });
+
+        // 🔥 REINCIDENTES REALES
+        const reincidentesCriticos = Object.values(conteoPersonas)
+            .filter(v => v >= 3)
+            .length;
+
+        setTexto("kpiReincidentes", reincidentesCriticos);
+
+            
+        }
 
 
 // =====================================================
@@ -431,16 +470,136 @@ function renderGraficoPersonas(data) {
 // 🥧 GRÁFICO 3 - MOTIVOS
 // Torta con cantidad + porcentaje
 // =====================================================
+
 function renderGraficoMotivos(data) {
-    renderPieChart({
-        chartKey: "motivos",
-        targetId: "motivospapeletas",
-        title: "Motivo de papeletas",
-        sourceData: data,
-        fieldNames: ["MOTIVO PAPELETA"]
+    const canvas = document.getElementById("motivospapeletas");
+    if (!canvas || canvas.tagName !== "CANVAS") return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // =====================================================
+    // 🧠 CONTAR MOTIVOS
+    // =====================================================
+    const conteo = {};
+
+    data.forEach(item => {
+        let motivo = getField(item, ["MOTIVO PAPELETA"]);
+
+        motivo = String(motivo || "")
+            .trim()
+            .toUpperCase();
+
+        if (!motivo) return;
+
+        conteo[motivo] = (conteo[motivo] || 0) + 1;
+    });
+
+    // =====================================================
+    // 🔝 ORDENAR DE MAYOR A MENOR
+    // =====================================================
+    const top = Object.entries(conteo)
+        .sort((a, b) => b[1] - a[1]);
+
+    destruirChart("motivos");
+
+    if (top.length === 0) {
+        limpiarCanvas("motivospapeletas");
+        return;
+    }
+
+    // =====================================================
+    // 📏 ALTURA DINÁMICA (PRO)
+    // =====================================================
+    const cantidad = top.length;
+    const altura = Math.max(300, cantidad * 30);
+
+    const contenedor = canvas.parentElement;
+    if (contenedor) {
+        contenedor.style.height = `${altura}px`;
+        canvas.style.height = `${altura}px`;
+        contenedor.style.overflowY = cantidad > 20 ? "auto" : "visible";
+    }
+
+    // =====================================================
+    // 📊 DATA
+    // =====================================================
+    const labels = top.map(([motivo]) => motivo);
+    const valores = top.map(([, cantidad]) => cantidad);
+    const colores = generarColoresPorValor(valores);
+
+    // =====================================================
+    // 🚀 GRÁFICO
+    // =====================================================
+    estado.charts.motivos = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Cantidad de papeletas",
+                data: valores,
+                backgroundColor: colores,
+                borderColor: colores,
+                borderWidth: 1,
+                borderRadius: 6,
+                borderSkipped: false,
+                maxBarThickness: 22
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            indexAxis: "y", // 🔥 horizontal
+
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: "#374151",
+                        font: { size: 12, weight: "600" }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => ` ${ctx.raw} papeleta(s)`
+                    }
+                },
+                datalabels: {
+                    color: "#374151",
+                    anchor: "end",
+                    align: "right",
+                    font: { weight: "bold", size: 11 },
+                    formatter: (v) => v
+                }
+            },
+
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        stepSize: 1,
+                        color: "#4b5563"
+                    },
+                    grid: {
+                        color: "rgba(0,0,0,0.07)"
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: "#374151",
+                        font: { size: 11 }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
     });
 }
-
 
 // =====================================================
 // 🥧 GRÁFICO 4 - TIPO DE PAPELETA
@@ -756,13 +915,20 @@ function contarPorCampo(data, fieldNames) {
     const resultado = {};
 
     data.forEach(item => {
-        const valor = getField(item, fieldNames) || "SIN DATO";
+        let valor = getField(item, fieldNames);
+
+        // 🔥 NORMALIZACIÓN CLAVE
+        valor = String(valor || "")
+            .trim()
+            .replace(/\s+/g, ""); // elimina espacios internos
+
+        if (!valor) return; // evita vacíos
+
         resultado[valor] = (resultado[valor] || 0) + 1;
     });
 
     return resultado;
 }
-
 
 // =====================================================
 // 🧠 OBTENER TOP
