@@ -935,8 +935,16 @@ function obtenerOpcionesBase({
                 cornerRadius: 8,
                 callbacks: {
                     label: (context) => {
-                        const label = context.dataset.label || "";
-                        const value = context.parsed.x ?? context.parsed.y ?? context.raw ?? 0;
+    const label = context.dataset.label || "";
+
+    let value = 0;
+
+                        if (context.parsed && typeof context.parsed.y !== "undefined") {
+                            value = context.parsed.y; // 🔥 CORRECTO PARA LINE Y BAR
+                        } else if (typeof context.raw !== "undefined") {
+                            value = context.raw;
+                        }
+
                         return `${label}: ${formatearNumero(value)}`;
                     }
                 }
